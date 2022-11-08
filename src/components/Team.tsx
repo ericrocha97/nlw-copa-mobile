@@ -4,12 +4,13 @@ import CountryFlag from "react-native-country-flag";
 import { Input } from "./Input";
 
 interface Props {
+  point: number;
   code: string;
   position: "left" | "right";
   onChangeText: (value: string) => void;
 }
 
-export function Team({ code, position, onChangeText }: Props) {
+export function Team({ code, position, onChangeText, point }: Props) {
   return (
     <HStack alignItems="center">
       {position === "left" && (
@@ -23,6 +24,8 @@ export function Team({ code, position, onChangeText }: Props) {
         fontSize="xs"
         keyboardType="numeric"
         onChangeText={onChangeText}
+        value={point === 0 ? "" : String(point)}
+        isDisabled={point > 0}
       />
 
       {position === "right" && (

@@ -1,6 +1,8 @@
 import { Button, HStack, Text, useTheme, VStack } from "native-base";
 import { X, Check } from "phosphor-react-native";
-import { getName } from "country-list";
+import dayjs from "dayjs";
+import ptBR from "dayjs/locale/pt-br";
+import countries from "i18n-iso-countries";
 
 import { Team } from "./Team";
 
@@ -15,6 +17,7 @@ interface GuessProps {
 
 export interface GameProps {
   id: string;
+  date: Date;
   firstTeamCountryCode: string;
   secondTeamCountryCode: string;
   guess: null | GuessProps;
@@ -35,6 +38,14 @@ export function Game({
 }: Props) {
   const { colors, sizes } = useTheme();
 
+  countries.registerLocale(require("i18n-iso-countries/langs/pt.json"));
+
+  const when = dayjs(data.date)
+    .locale(ptBR)
+    .format("DD [de] MMMM [de] YYYY [às] HH:mm[h]");
+
+  const disabled = new Date() >= new Date(data.date);
+
   return (
     <VStack
       w="full"
@@ -47,12 +58,12 @@ export function Game({
       p={4}
     >
       <Text color="gray.100" fontFamily="heading" fontSize="sm">
-        {getName(data.firstTeamCountryCode)} vs.{" "}
-        {getName(data.secondTeamCountryCode)}
+        {countries.getName(data.firstTeamCountryCode, "pt")} vs.{" "}
+        {countries.getName(data.secondTeamCountryCode, "pt")}
       </Text>
 
       <Text color="gray.200" fontSize="xs">
-        22 de Novembro de 2022 às 16:00h
+        {when}
       </Text>
 
       <HStack
@@ -63,6 +74,7 @@ export function Game({
       >
         <Team
           code={data.firstTeamCountryCode}
+          point={data.guess ? data.guess.firstTeamPoints : 0}
           position="right"
           onChangeText={setFirstTeamPoints}
         />
@@ -71,6 +83,7 @@ export function Game({
 
         <Team
           code={data.secondTeamCountryCode}
+          point={data.guess ? data.guess.secondTeamPoints : 0}
           position="left"
           onChangeText={setSecondTeamPoints}
         />
@@ -83,13 +96,39 @@ export function Game({
           bgColor="green.500"
           mt={4}
           onPress={onGuessConfirm}
+          isDisabled={disabled}
+          _disabled={{
+            bgColor: "gray.600",
+          }}
         >
           <HStack alignItems="center">
-            <Text color="white" fontSize="xs" fontFamily="heading" mr={3}>
-              CONFIRMAR PALPITE
-            </Text>
+            {disabled ? (
+              <>
+                <Text
+                  color={"gray.300"}
+                  textTransform="uppercase"
+                  fontSize="xs"
+                  fontFamily="heading"
+                  mr={3}
+                >
+                  Tempo Esgotado
+                </Text>
+              </>
+            ) : (
+              <>
+                <Text
+                  color={"white"}
+                  textTransform="uppercase"
+                  fontSize="xs"
+                  fontFamily="heading"
+                  mr={3}
+                >
+                  Confirmar Palpite
+                </Text>
 
-            <Check color={colors.white} size={sizes[4]} />
+                <Check color={colors.white} size={sizes[4]} />
+              </>
+            )}
           </HStack>
         </Button>
       )}

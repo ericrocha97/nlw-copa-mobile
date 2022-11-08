@@ -1,34 +1,32 @@
-import { Row, Text, Pressable } from "native-base";
+import { useNavigation } from "@react-navigation/native";
+import { Row, Text } from "native-base";
+import { TouchableWithoutFeedback } from "react-native";
 
 export function EmptyPoolList() {
+  const { navigate } = useNavigation();
+
   return (
     <Row flexWrap="wrap" justifyContent="center">
       <Text color="white" fontSize="sm" textAlign="center">
-        Você ainda não está participando de {"\n"} nenhum bolão, que tal
-      </Text>
+        {`Você ainda não está participando de 
+nenhum bolão, que tal `}
 
-      <Pressable>
-        <Text
-          textDecorationLine="underline"
-          color="yellow.500"
-          textDecoration="underline"
-        >
-          buscar um por código
-        </Text>
-      </Pressable>
+        <TouchableWithoutFeedback onPress={() => navigate("find")}>
+          <Text textDecorationLine="underline" fontSize="sm" color="yellow.500">
+            buscar um por código
+          </Text>
+        </TouchableWithoutFeedback>
 
-      <Text color="white" fontSize="sm" textAlign="center" mx={1}>
-        ou
-      </Text>
+        {` 
+ou `}
 
-      <Pressable>
-        <Text textDecorationLine="underline" color="yellow.500">
-          criar um novo
-        </Text>
-      </Pressable>
+        <TouchableWithoutFeedback onPress={() => navigate("new")}>
+          <Text textDecorationLine="underline" fontSize="sm" color="yellow.500">
+            criar um novo
+          </Text>
+        </TouchableWithoutFeedback>
 
-      <Text color="white" fontSize="sm" textAlign="center">
-        ?
+        {`?`}
       </Text>
     </Row>
   );

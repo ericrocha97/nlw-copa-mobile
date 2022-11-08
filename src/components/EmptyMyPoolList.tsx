@@ -1,41 +1,32 @@
-import { Row, Text, Pressable } from "native-base";
+import { Row, Text } from "native-base";
+import { TouchableWithoutFeedback } from "react-native";
 
 interface Props {
   code: string;
+  onShare: () => void;
 }
 
-export function EmptyMyPoolList({ code }: Props) {
+export function EmptyMyPoolList({ code, onShare }: Props) {
   return (
-    <Row flexWrap="wrap" justifyContent="center" p={4}>
-      <Text color="gray.200" fontSize="sm">
-        Esse bolão ainda não tem participantes, que tal
-      </Text>
-
-      <Pressable onPress={() => {}}>
+    <Row flexWrap="wrap" justifyContent="center">
+      <Text color="gray.200" fontSize="sm" textAlign="center">
+        {`Esse bolão ainda não tem participantes, que 
+tal `}
+        <TouchableWithoutFeedback onPress={onShare}>
+          <Text textDecorationLine="underline" fontSize="sm" color="yellow.500">
+            compartilhar o código
+          </Text>
+        </TouchableWithoutFeedback>
+        {` do bolão com 
+alguém? Use o código `}
         <Text
-          textDecorationLine="underline"
-          color="yellow.500"
-          textDecoration="underline"
+          color="gray.200"
+          fontSize="sm"
+          textAlign="center"
+          fontFamily="heading"
         >
-          compartilhar o código
+          {code}
         </Text>
-      </Pressable>
-
-      <Text color="gray.200" fontSize="sm" mx={1}>
-        do bolão com alguém?
-      </Text>
-
-      <Text color="gray.200" mr={1}>
-        Use o código
-      </Text>
-
-      <Text
-        color="gray.200"
-        fontSize="sm"
-        textAlign="center"
-        fontFamily="heading"
-      >
-        {code}
       </Text>
     </Row>
   );
